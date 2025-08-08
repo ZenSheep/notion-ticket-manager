@@ -55,6 +55,12 @@ NOTION_USER_ID=your_user_id_here
 NOTION_TOKEN=your_integration_token_here
 MR_TEMPLATE=your_merge_request_template_here
 GITLAB_ASSIGNEE_ID=your_gitlab_assignee_id_here
+
+# Ticket States Configuration (Optional)
+INITIAL_TICKET_STATES=Daily,Ready
+AVAILABLE_TICKET_STATES=Daily,Ready,In Progress,Code Review
+IN_PROGRESS_STATE=In Progress
+CODE_REVIEW_STATE=Code Review
 ```
 
 ### Option B: Local Configuration
@@ -79,6 +85,24 @@ The app loads configuration in this order (later files override earlier ones):
 
 This allows you to have global settings in `~/.znrc` and override them per project with `.env` files.
 
+### Ticket States Configuration
+
+The app uses configurable ticket states to adapt to different Notion workflows. **All ticket state variables are required**:
+
+- **`INITIAL_TICKET_STATES`**: States to search for first (e.g., `Daily,Ready`)
+- **`AVAILABLE_TICKET_STATES`**: All available states if initial search fails
+- **`IN_PROGRESS_STATE`**: State to set when starting work on a ticket
+- **`CODE_REVIEW_STATE`**: State to set when creating a merge request
+
+Example configuration:
+
+```env
+INITIAL_TICKET_STATES=Daily,Ready
+AVAILABLE_TICKET_STATES=Daily,Ready,In Progress,Code Review
+IN_PROGRESS_STATE=In Progress
+CODE_REVIEW_STATE=Code Review
+```
+
 ### Option 2: Install via pip (when published)
 
 ```bash
@@ -97,14 +121,18 @@ pip install notion-ticket-manager
 
 ### Environment Variables
 
-| Variable             | Description                   | Required |
-| -------------------- | ----------------------------- | -------- |
-| `NOTION_BASE_URL`    | Notion API base URL           | Yes      |
-| `DATABASE_ID`        | Your Notion database ID       | Yes      |
-| `NOTION_USER_ID`     | Your Notion user ID           | Yes      |
-| `NOTION_TOKEN`       | Your Notion integration token | Yes      |
-| `MR_TEMPLATE`        | Merge request template        | No       |
-| `GITLAB_ASSIGNEE_ID` | GitLab assignee ID            | No       |
+| Variable                  | Description                           | Required | Default |
+| ------------------------- | ------------------------------------- | -------- | ------- |
+| `NOTION_BASE_URL`         | Notion API base URL                   | Yes      | -       |
+| `DATABASE_ID`             | Your Notion database ID               | Yes      | -       |
+| `NOTION_USER_ID`          | Your Notion user ID                   | Yes      | -       |
+| `NOTION_TOKEN`            | Your Notion integration token         | Yes      | -       |
+| `MR_TEMPLATE`             | Merge request template                | No       | -       |
+| `GITLAB_ASSIGNEE_ID`      | GitLab assignee ID                    | No       | -       |
+| `INITIAL_TICKET_STATES`   | Comma-separated initial ticket states | Yes      | -       |
+| `AVAILABLE_TICKET_STATES` | Comma-separated available states      | Yes      | -       |
+| `IN_PROGRESS_STATE`       | State name for tickets in progress    | Yes      | -       |
+| `CODE_REVIEW_STATE`       | State name for tickets in review      | Yes      | -       |
 
 ## Usage
 
@@ -118,10 +146,10 @@ zn --new
 
 This will:
 
-1. Show available tickets assigned to you
+1. Show available tickets assigned to you (from `INITIAL_TICKET_STATES`)
 2. Let you select a ticket
 3. Create a Git branch with the ticket identifier
-4. Update the ticket state to "En cours"
+4. Update the ticket state to your configured `IN_PROGRESS_STATE`
 
 ### Create a Merge Request
 
@@ -134,7 +162,7 @@ zn --mr
 This will:
 
 1. Extract ticket identifier from the current branch name
-2. Update the ticket state to "Code review"
+2. Update the ticket state to your configured `CODE_REVIEW_STATE`
 3. Generate a GitLab merge request URL with pre-filled information
 4. Optionally open the URL in your browser
 

@@ -19,17 +19,19 @@ from .services.ticket_service import (
 
 
 def new_ticket():
+    config = EnvironmentConfig()
     tickets = get_available_tickets()
     tickets_list = tickets["results"]
     ticket_id, ticket_identifier = select_ticket(tickets_list)
     create_branch(ticket_identifier)
-    set_ticket_state(ticket_id, "En cours")
+    set_ticket_state(ticket_id, config.get_in_progress_state())
 
 
 def create_mr():
+    config = EnvironmentConfig()
     ticket_identifier, branch_name = get_ticket_identifier_from_branch()
     ticket = get_ticket_from_identifier(ticket_identifier)
-    set_ticket_state(ticket["id"], "Code review")
+    set_ticket_state(ticket["id"], config.get_code_review_state())
     ticket_name = get_ticket_name(ticket)
     merge_request_url = get_merge_request_url(branch_name, ticket_name)
     questions = [

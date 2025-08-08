@@ -29,6 +29,15 @@ class EnvironmentConfig:
         self.mr_template = os.getenv("MR_TEMPLATE")
         self.gitlab_assignee_id = os.getenv("GITLAB_ASSIGNEE_ID")
 
+        # Property names configuration
+        self.state_property_name = os.getenv("STATE_PROPERTY_NAME", "État")
+
+        # Ticket states configuration
+        self.initial_states = self._parse_states("INITIAL_TICKET_STATES", [])
+        self.available_states = self._parse_states("AVAILABLE_TICKET_STATES", [])
+        self.in_progress_state = os.getenv("IN_PROGRESS_STATE")
+        self.code_review_state = os.getenv("CODE_REVIEW_STATE")
+
     def get_notion_base_url(self):
         """Get the NOTION_BASE_URL environment variable"""
         return self.notion_base_url
@@ -53,6 +62,33 @@ class EnvironmentConfig:
         """Get the GITLAB_ASSIGNEE_ID environment variable"""
         return self.gitlab_assignee_id
 
+    def _parse_states(self, env_var_name, default_states):
+        """Parse comma-separated states from environment variable"""
+        states_str = os.getenv(env_var_name)
+        if states_str:
+            return [state.strip() for state in states_str.split(",")]
+        return default_states
+
+    def get_initial_states(self):
+        """Get the initial ticket states to search for"""
+        return self.initial_states
+
+    def get_available_states(self):
+        """Get all available ticket states"""
+        return self.available_states
+
+    def get_in_progress_state(self):
+        """Get the state name for tickets in progress"""
+        return self.in_progress_state
+
+    def get_code_review_state(self):
+        """Get the state name for tickets in code review"""
+        return self.code_review_state
+
+    def get_state_property_name(self):
+        """Get the property name for ticket state"""
+        return self.state_property_name
+
     def validate_config(self):
         """Validate that required environment variables are set"""
         missing_vars = []
@@ -65,6 +101,16 @@ class EnvironmentConfig:
             missing_vars.append("NOTION_USER_ID")
         if self.notion_token is None:
             missing_vars.append("NOTION_TOKEN")
+        if not self.initial_states:
+            missing_vars.append("INITIAL_TICKET_STATES")
+        if not self.available_states:
+            missing_vars.append("AVAILABLE_TICKET_STATES")
+        if self.in_progress_state is None:
+            missing_vars.append("IN_PROGRESS_STATE")
+        if self.code_review_state is None:
+            missing_vars.append("CODE_REVIEW_STATE")
+        if self.state_property_name is None:
+            missing_vars.append("STATE_PROPERTY_NAME")
         if missing_vars:
             print(f"Warning: Missing environment variables: {', '.join(missing_vars)}")
             return False
@@ -81,6 +127,18 @@ class EnvironmentConfig:
         print(f"NOTION_TOKEN: {token_display}")
         print(f"MR_TEMPLATE: {self.mr_template}")
         print(f"GITLAB_ASSIGNEE_ID: {self.gitlab_assignee_id}")
+        initial_states_display = (
+            ", ".join(self.initial_states) if self.initial_states else "Not set"
+        )
+        print(f"INITIAL_TICKET_STATES: {initial_states_display}")
+
+        available_states_display = (
+            ", ".join(self.available_states) if self.available_states else "Not set"
+        )
+        print(f"AVAILABLE_TICKET_STATES: {available_states_display}")
+        print(f"IN_PROGRESS_STATE: {self.in_progress_state or 'Not set'}")
+        print(f"CODE_REVIEW_STATE: {self.code_review_state or 'Not set'}")
+        print(f"STATE_PROPERTY_NAME: {self.state_property_name or 'Not set'}")
 
 
 # Example usage

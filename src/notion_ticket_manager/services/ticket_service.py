@@ -22,7 +22,7 @@ def retrieve_tickets(states):
                 },
                 {
                     "or": [
-                        {"property": "État", "status": {"equals": state}}
+                        {"property": config.get_state_property_name(), "status": {"equals": state}}
                         for state in states
                     ]
                 },
@@ -40,13 +40,17 @@ def retrieve_tickets(states):
 
 
 def get_available_tickets():
-    states = ["Daily"]
-    tickets = retrieve_tickets(states)
-    if len(tickets) > 0:
+    config = EnvironmentConfig()
+    initial_states = config.get_initial_states()
+    available_states = config.get_available_states()
+
+    # First try with initial states
+    tickets = retrieve_tickets(initial_states)
+    if len(tickets["results"]) > 0:
         return tickets
-    states.append("Strat tech OK")
-    states.append("Priorisé")
-    return retrieve_tickets(states)
+
+    # If no tickets found, try with all available states
+    return retrieve_tickets(available_states)
 
 
 def select_ticket(tickets):
@@ -93,7 +97,7 @@ def set_ticket_state(ticket_id, state):
 
     config = EnvironmentConfig()
     payload = {
-        "properties": {"État": {"status": {"name": state}}},
+        "properties": {config.get_state_property_name(): {"status": {"name": state}}},
         "parent": {"database_id": config.get_database_id()},
     }
     response = patch_page(ticket_id, payload)
