@@ -36,17 +36,16 @@ pip install -e .
 
 3. Set up environment variables:
 
-```bash
-cp .env.example .env
-```
+### Option A: Global Configuration (Recommended)
 
-Edit the `.env` file with your configuration:
-
-### Option 2: Install via pip (when published)
+Create a configuration file in your home directory:
 
 ```bash
-pip install notion-ticket-manager
+# Create the configuration file
+touch ~/.znrc
 ```
+
+Edit `~/.znrc` with your configuration:
 
 ```env
 # Notion API Configuration
@@ -56,6 +55,34 @@ NOTION_USER_ID=your_user_id_here
 NOTION_TOKEN=your_integration_token_here
 MR_TEMPLATE=your_merge_request_template_here
 GITLAB_ASSIGNEE_ID=your_gitlab_assignee_id_here
+```
+
+### Option B: Local Configuration
+
+For project-specific settings, create a `.env` file in your project directory:
+
+```bash
+cp .env.example .env
+```
+
+Edit the `.env` file with your configuration (same format as above).
+
+**Note**: Local `.env` files take precedence over the global `~/.znrc` configuration.
+
+### Configuration File Priority
+
+The app loads configuration in this order (later files override earlier ones):
+
+1. **System environment variables**
+2. **`~/.znrc`** (global configuration in your home directory)
+3. **`.env`** (local configuration in current directory)
+
+This allows you to have global settings in `~/.znrc` and override them per project with `.env` files.
+
+### Option 2: Install via pip (when published)
+
+```bash
+pip install notion-ticket-manager
 ```
 
 ## Configuration

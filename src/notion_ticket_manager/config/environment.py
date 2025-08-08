@@ -1,9 +1,23 @@
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
+
+# Load environment variables from multiple locations
+# Priority: 1. Current directory .env, 2. Home directory .znrc, 3. System env vars
+def load_environment():
+    # Load from current directory .env file
+    load_dotenv()
+
+    # Load from home directory configuration file
+    home_config = Path.home() / ".znrc"
+    if home_config.exists():
+        load_dotenv(home_config)
+
+
+# Load environment variables
+load_environment()
 
 
 class EnvironmentConfig:
