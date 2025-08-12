@@ -151,6 +151,18 @@ This will:
 3. Create a Git branch with the ticket identifier
 4. Update the ticket state to your configured `IN_PROGRESS_STATE`
 
+### Push Changes
+
+Push the current branch to the upstream remote:
+
+```bash
+zn --push
+```
+
+This will:
+
+1. Push the current branch to the upstream remote repository
+
 ### Create a Merge Request
 
 Generate a merge request URL for the current branch:
@@ -172,6 +184,7 @@ You can also use the full command name:
 
 ```bash
 notion-ticket-manager --new
+notion-ticket-manager --push
 notion-ticket-manager --mr
 ```
 
@@ -182,6 +195,7 @@ Once installed, the `zn` command is available globally from any directory:
 ```bash
 # From any folder on your system
 zn --new
+zn --push
 zn --mr
 ```
 
@@ -292,6 +306,7 @@ make clean
 
 # Run CLI commands
 zn --new
+zn --push
 zn --mr
 ```
 

@@ -8,6 +8,7 @@ from .services.git_service import (
     create_branch,
     get_merge_request_url,
     get_ticket_identifier_from_branch,
+    push_upstream,
 )
 from .services.ticket_service import (
     get_available_tickets,
@@ -45,6 +46,11 @@ def create_mr():
     if answers["open"]:
         webbrowser.open(merge_request_url)
 
+def push():
+    _ticket_identifier, branch_name = get_ticket_identifier_from_branch()
+    push_upstream(branch_name)
+
+
 
 def main():
     # Validate configuration
@@ -54,12 +60,15 @@ def main():
     parser = argparse.ArgumentParser(description="Notion API - Gestion des tickets")
     parser.add_argument("--new", action="store_true", help="Créer une nouvelle tâche")
     parser.add_argument("--mr", action="store_true", help="Créer une merge request")
+    parser.add_argument("--push", action="store_true", help="Pousser les modifications vers le remote")
     args = parser.parse_args()
 
     if args.new:
         new_ticket()
     elif args.mr:
         create_mr()
+    elif args.push:
+        push()
     else:
         parser.print_help()
 

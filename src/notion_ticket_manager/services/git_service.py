@@ -73,3 +73,7 @@ def get_merge_request_url(branch_name, title=None, assignee_id=48):
         base_url += f"&merge_request[assignee_id]={assignee_id}"
 
     return base_url
+
+def push_upstream(branch_name):
+    run_git_command(["git", "push", "--set-upstream", "origin", branch_name])
+    print(f"✅ Branche '{branch_name}' poussée avec succès.")
