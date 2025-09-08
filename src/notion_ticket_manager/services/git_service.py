@@ -55,9 +55,10 @@ def get_ticket_identifier_from_branch():
 
 
 def get_merge_request_url(branch_name, title=None, assignee_id=48):
+    config = EnvironmentConfig()
     template = EnvironmentConfig().get_mr_template()
     base_url = (
-        f"https://git.protilab.com/protilab/client-portal/-/merge_requests/new"
+        f"{config.get_gitlab_repository_url()}/-/merge_requests/new"
         f"?merge_request[source_branch]={branch_name}"
     )
 

@@ -38,6 +38,9 @@ class EnvironmentConfig:
         self.in_progress_state = os.getenv("IN_PROGRESS_STATE")
         self.code_review_state = os.getenv("CODE_REVIEW_STATE")
 
+        # Gitlab configuration
+        self.gitlab_repository_url = os.getenv("GITLAB_REPOSITORY_URL")
+
     def get_notion_base_url(self):
         """Get the NOTION_BASE_URL environment variable"""
         return self.notion_base_url
@@ -57,6 +60,10 @@ class EnvironmentConfig:
     def get_mr_template(self):
         """Get the MR_TEMPLATE environment variable"""
         return self.mr_template
+
+    def get_gitlab_repository_url(self):
+        """Get the GITLAB_REPOSITORY_URL environment variable"""
+        return self.gitlab_repository_url
 
     def get_gitlab_assignee_id(self):
         """Get the GITLAB_ASSIGNEE_ID environment variable"""
@@ -111,6 +118,8 @@ class EnvironmentConfig:
             missing_vars.append("CODE_REVIEW_STATE")
         if self.state_property_name is None:
             missing_vars.append("STATE_PROPERTY_NAME")
+        if self.gitlab_repository_url is None:
+            missing_vars.append("GITLAB_REPOSITORY_URL")
         if missing_vars:
             print(f"Warning: Missing environment variables: {', '.join(missing_vars)}")
             return False
@@ -139,7 +148,7 @@ class EnvironmentConfig:
         print(f"IN_PROGRESS_STATE: {self.in_progress_state or 'Not set'}")
         print(f"CODE_REVIEW_STATE: {self.code_review_state or 'Not set'}")
         print(f"STATE_PROPERTY_NAME: {self.state_property_name or 'Not set'}")
-
+        print(f"GITLAB_REPOSITORY_URL: {self.gitlab_repository_url or 'Not set'}")
 
 # Example usage
 if __name__ == "__main__":

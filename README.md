@@ -53,8 +53,11 @@ NOTION_BASE_URL=https://api.notion.com
 DATABASE_ID=your_database_id_here
 NOTION_USER_ID=your_user_id_here
 NOTION_TOKEN=your_integration_token_here
+
+# Gitlab Configuration
 MR_TEMPLATE=your_merge_request_template_here
 GITLAB_ASSIGNEE_ID=your_gitlab_assignee_id_here
+GITLAB_REPOSITORY_URL=your_gitlab_repository_url_here
 
 # Ticket States Configuration (Optional)
 INITIAL_TICKET_STATES=Daily,Ready
