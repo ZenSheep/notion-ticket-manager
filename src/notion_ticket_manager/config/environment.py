@@ -5,10 +5,18 @@ from dotenv import load_dotenv
 
 
 # Load environment variables from multiple locations
-# Priority: 1. Current directory .env, 2. Home directory .znrc, 3. System env vars
+# Priority: 1. Current directory .env, 2. Current directory .znrc, 3. Home directory .znrc, 4. System env vars
 def load_environment():
+    current_dir_config = Path.cwd()
     # Load from current directory .env file
-    load_dotenv()
+    current_env_config = current_dir_config / ".env"
+    if current_env_config.exists():
+        load_dotenv(current_env_config)
+
+    # Load from current directory .znrc file
+    current_znrc_config = current_dir_config / ".znrc"
+    if current_znrc_config.exists():
+        load_dotenv(current_znrc_config)
 
     # Load from home directory configuration file
     home_config = Path.home() / ".znrc"
