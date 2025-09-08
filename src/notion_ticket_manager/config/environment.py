@@ -49,6 +49,9 @@ class EnvironmentConfig:
         # Gitlab configuration
         self.gitlab_repository_url = os.getenv("GITLAB_REPOSITORY_URL")
 
+        # Debug configuration
+        self.debug_enabled = os.getenv("DEBUG", "0") == "1"
+
     def get_notion_base_url(self):
         """Get the NOTION_BASE_URL environment variable"""
         return self.notion_base_url
@@ -104,6 +107,10 @@ class EnvironmentConfig:
         """Get the property name for ticket state"""
         return self.state_property_name
 
+    def is_debug_enabled(self):
+        """Check if debug mode is enabled"""
+        return self.debug_enabled
+
     def validate_config(self):
         """Validate that required environment variables are set"""
         missing_vars = []
@@ -132,7 +139,7 @@ class EnvironmentConfig:
             print(f"Warning: Missing environment variables: {', '.join(missing_vars)}")
             return False
 
-        print("All required environment variables are set")
+        debug_print("All required environment variables are set")
         return True
 
     def print_config(self):
@@ -157,6 +164,13 @@ class EnvironmentConfig:
         print(f"CODE_REVIEW_STATE: {self.code_review_state or 'Not set'}")
         print(f"STATE_PROPERTY_NAME: {self.state_property_name or 'Not set'}")
         print(f"GITLAB_REPOSITORY_URL: {self.gitlab_repository_url or 'Not set'}")
+
+def debug_print(message):
+    """Print message only if DEBUG environment variable is set to 1"""
+    config = EnvironmentConfig()
+    if config.is_debug_enabled():
+        print(message)
+
 
 # Example usage
 if __name__ == "__main__":

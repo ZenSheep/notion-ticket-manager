@@ -136,6 +136,7 @@ pip install notion-ticket-manager
 | `AVAILABLE_TICKET_STATES` | Comma-separated available states      | Yes      | -       |
 | `IN_PROGRESS_STATE`       | State name for tickets in progress    | Yes      | -       |
 | `CODE_REVIEW_STATE`       | State name for tickets in review      | Yes      | -       |
+| `DEBUG`                   | Enable debug output (set to "1")      | No       | "0"     |
 
 ## Usage
 
@@ -165,6 +166,20 @@ zn --push
 This will:
 
 1. Push the current branch to the upstream remote repository
+
+### Debug Mode
+
+Enable debug output to see additional information during execution:
+
+```bash
+DEBUG=1 zn --new
+```
+
+When debug mode is enabled (`DEBUG=1`), the tool will display:
+
+- Configuration validation messages
+- Success messages for Git operations
+- Detailed configuration information
 
 ### Create a Merge Request
 
