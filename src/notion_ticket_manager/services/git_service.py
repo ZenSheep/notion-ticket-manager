@@ -20,6 +20,7 @@ def run_git_command(command):
 
 
 def create_branch(ticket_identifier):
+    config = EnvironmentConfig()
     questions = [
         inquirer.Text(
             "branch_name",
@@ -35,7 +36,7 @@ def create_branch(ticket_identifier):
 
     branch_name = answers["branch_name"]
 
-    run_git_command(["git", "checkout", "-b", branch_name])
+    run_git_command(["git", "checkout", "-b", branch_name, config.get_gitlab_default_branch()])
     print(f"✅ Branche '{branch_name}' créée et activée avec succès.")
 
 

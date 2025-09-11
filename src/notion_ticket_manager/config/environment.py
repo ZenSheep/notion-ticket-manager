@@ -48,6 +48,7 @@ class EnvironmentConfig:
 
         # Gitlab configuration
         self.gitlab_repository_url = os.getenv("GITLAB_REPOSITORY_URL")
+        self.gitlab_default_branch = os.getenv("GITLAB_DEFAULT_BRANCH", "main")
 
         # Debug configuration
         self.debug_enabled = os.getenv("DEBUG", "0") == "1"
@@ -79,6 +80,10 @@ class EnvironmentConfig:
     def get_gitlab_assignee_id(self):
         """Get the GITLAB_ASSIGNEE_ID environment variable"""
         return self.gitlab_assignee_id
+
+    def get_gitlab_default_branch(self):
+        """Get the GITLAB_DEFAULT_BRANCH environment variable"""
+        return self.gitlab_default_branch
 
     def _parse_states(self, env_var_name, default_states):
         """Parse comma-separated states from environment variable"""
@@ -164,6 +169,7 @@ class EnvironmentConfig:
         print(f"CODE_REVIEW_STATE: {self.code_review_state or 'Not set'}")
         print(f"STATE_PROPERTY_NAME: {self.state_property_name or 'Not set'}")
         print(f"GITLAB_REPOSITORY_URL: {self.gitlab_repository_url or 'Not set'}")
+        print(f"GITLAB_DEFAULT_BRANCH: {self.gitlab_default_branch or 'Not set'}")
 
 def debug_print(message):
     """Print message only if DEBUG environment variable is set to 1"""
