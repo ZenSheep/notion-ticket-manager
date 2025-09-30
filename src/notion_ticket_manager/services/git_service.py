@@ -40,9 +40,12 @@ def create_branch(ticket_identifier):
     print(f"✅ Branche '{branch_name}' créée et activée avec succès.")
 
 
+def get_branch_name():
+    return run_git_command(["git", "branch", "--show-current"])
+
 def get_ticket_identifier_from_branch():
 
-    branch_name = run_git_command(["git", "branch", "--show-current"])
+    branch_name = get_branch_name()
     try:
         ticket_identifier = branch_name.split("-")[0].split("/")[1]
         return ticket_identifier, branch_name

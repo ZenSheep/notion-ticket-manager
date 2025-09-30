@@ -8,6 +8,7 @@ from .services.git_service import (
     create_branch,
     get_merge_request_url,
     get_ticket_identifier_from_branch,
+    get_branch_name,
     push_upstream,
 )
 from .services.ticket_service import (
@@ -47,7 +48,7 @@ def create_mr():
         webbrowser.open(merge_request_url)
 
 def push():
-    _ticket_identifier, branch_name = get_ticket_identifier_from_branch()
+    branch_name = get_branch_name()
     push_upstream(branch_name)
 
 
